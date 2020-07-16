@@ -1,0 +1,18 @@
+type Tweet {
+    id: Int!
+    authorId: Int!
+    likes: Int!
+    retweets: Int!
+    favorite: Boolean!
+    text: String!
+}
+
+type Query {
+    tweets: [Tweet]
+    tweetById(id: Int!): Tweet
+}
+
+type Mutation {
+    newTweet(authorId: Int!, text: String!): Tweet
+    updateTweetFavoriteState(tweetId: Int!, state: Boolean!): [Tweet]
+}

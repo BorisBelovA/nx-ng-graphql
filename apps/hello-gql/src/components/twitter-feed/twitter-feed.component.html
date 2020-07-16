@@ -1,0 +1,17 @@
+<div class="feed-container">
+    <button mat-raised-button color="primary" class="add-tweet" (click)="openNewTweetForm()">Бахнуть новый твит!</button>
+    <ng-container *ngIf="newTweetFormVisible then newTweetForm"></ng-container>
+    <ng-container *ngFor="let tweet of feed">
+        <tweet [tweet]="tweet" (favoriteTweet)="onTweetFavorite($event)"></tweet>
+    </ng-container>
+</div>
+
+<ng-template #newTweetForm>
+    <div class="new-tweet-form">
+        <mat-form-field class="new-tweet-form-field">
+            <mat-label>Текст вашего твита</mat-label>
+            <input matInput type="text" [(ngModel)]="tweetText">
+        </mat-form-field>
+        <button mat-stroked-button color="accent" class="send-tweet" (click)="makeTweet()">Поихали!</button>
+    </div>
+</ng-template>

@@ -1,8 +1,9 @@
-<div style="text-align: center;">
+<!-- <div style="text-align: center;">
   <h1>Welcome to hello-gql!</h1>
   <img
     width="450"
     src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
   />
 </div>
-<div>Message: {{ hello$ | async | json }}</div>
+<div>Message: {{ hello$ | async | json }}</div> -->
+<twitter-feed [feed]="feed$ |async" (newTweet)="onNewTweet($event)"></twitter-feed>

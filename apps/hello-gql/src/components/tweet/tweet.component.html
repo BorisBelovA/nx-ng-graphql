@@ -1,0 +1,19 @@
+<div class="tweet">
+    <div class="user-section">
+        <div class="user-pic"></div>
+        <div class="user-name">
+            user name
+        </div>
+    </div>
+    <div class="text-section">
+        <p>{{tweet.text}}</p>
+    </div>
+    <div class="action-btns-section">
+        <div class="like-btn" [class.not-favorite]="!tweet.favorite" (click)="onLikeHandler(tweet)">
+            <i class="fa fa-heart"></i>
+        </div>
+        <div class="repost-btn">
+            <i class="fa fa-retweet"></i>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+:host {
+    width: 50%;
+
+    .tweet {
+        margin: 15px 0;
+        border: 1px solid black;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+
+    .user-section {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        
+        .user-pic {
+            width: 40px;
+            height: 40px;
+            background-image: url('../../assets/img/user.svg');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .user-name {
+            font-size: 20px;
+        }
+    }
+
+    .action-btns-section {
+        display: flex;
+        align-items: center;
+
+        .like-btn, .repost-btn {
+            font-size: 30px;
+            text-align: center;
+            padding: 0 10px;
+            cursor: pointer;
+
+            opacity: 0.7;
+            &:hover{
+                opacity: 1;
+            }
+        }
+
+        .like-btn {
+            color: #ad2222;
+            
+            &.not-favorite {
+                color: #757575;
+            }            
+        }
+
+        .repost-btn {
+            color: #312c2c;
+        }
+    }
+}
