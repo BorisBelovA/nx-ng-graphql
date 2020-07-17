@@ -14,7 +14,7 @@ export class Message {
 export abstract class IMutation {
     abstract newTweet(authorId: number, text: string): Tweet | Promise<Tweet>;
 
-    abstract updateTweetFavoriteState(tweetId: number, state: boolean): Tweet[] | Promise<Tweet[]>;
+    abstract updateTweetFavoriteState(tweetId: number, state: boolean): Tweet | Promise<Tweet>;
 }
 
 export abstract class IQuery {
@@ -22,7 +22,7 @@ export abstract class IQuery {
 
     abstract message(id: number): Message | Promise<Message>;
 
-    abstract tweets(): Tweet[] | Promise<Tweet[]>;
+    abstract tweets(offset?: number): Tweet[] | Promise<Tweet[]>;
 
     abstract tweetById(id: number): Tweet | Promise<Tweet>;
 }

@@ -4,6 +4,12 @@ import { Tweet } from 'libs/models/graphql';
 @Resolver('Tweet')
 export class TweetsResolver {
     public tweets: Tweet[] = [
+        {id: 13, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #14', favorite: false},
+        {id: 12, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #13', favorite: false},
+        {id: 11, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #12', favorite: false},
+        {id: 10, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #11', favorite: false},
+        {id: 9, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #10', favorite: false},
+        {id: 8, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #9', favorite: false},
         {id: 7, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #8', favorite: false},
         {id: 6, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #7', favorite: false},
         {id: 5, authorId: 1, likes: 0, retweets: 0, text: 'Simple tweet text #6', favorite: false},
@@ -15,8 +21,12 @@ export class TweetsResolver {
     ]
 
     @Query('tweets')
-    async getTweets() {
-        return this.tweets;
+    async getTweets(
+        @Args('offset') offset: number
+    ) {
+        console.log(offset)
+        if (!offset) return this.tweets.slice(0, 10);
+        return this.tweets.slice(offset, 10);
     }
 
     @Query('tweetById')
@@ -47,13 +57,15 @@ export class TweetsResolver {
         @Args('tweetId') tweetId: number,
         @Args('state') state: boolean
     ) {
+        const updatedTweet: Tweet = this.tweets.find(t => t.id === tweetId);
+        updatedTweet.favorite = state;
         this.tweets = this.tweets.reduce((acc, curr) => {
             if (curr.id === tweetId) {
-                curr.favorite = state;
+                curr = updatedTweet;
             }
             acc.push(curr);
             return acc;
         }, []);
-        return this.tweets;
+        return updatedTweet;
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { Tweet } from 'libs/models/graphql';
 import { TweetsService } from '../../services/tweets/tweets-service.service';
-
+import {map} from 'rxjs/operators'
 @Component({
   selector: 'twitter-feed',
   templateUrl: './twitter-feed.component.html',
@@ -40,7 +40,10 @@ export class TwitterFeedComponent implements OnInit {
   }
 
   public onTweetFavorite(event: {tweet: Tweet, favorite: boolean}): void {
-    console.log(event)
     this.tweetsSetvice.updateTweetFavoriteState(event.tweet.id, event.favorite);
+  }
+
+  public getEarlierTweets(): void {
+    this.tweetsSetvice.loadMoreTweets()
   }
 }

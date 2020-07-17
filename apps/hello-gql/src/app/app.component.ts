@@ -14,7 +14,7 @@ export class AppComponent {
     private http: HttpClient,
     private tweetsSetvice: TweetsService
   ) {
-    this.tweetsSetvice.getTweets().subscribe(d => console.log(d))
+    this.tweetsSetvice.getTweets().subscribe()
   }
 
   public feed$ = this.tweetsSetvice.getTweets();

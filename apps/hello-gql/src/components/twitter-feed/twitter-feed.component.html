@@ -4,6 +4,7 @@
     <ng-container *ngFor="let tweet of feed">
         <tweet [tweet]="tweet" (favoriteTweet)="onTweetFavorite($event)"></tweet>
     </ng-container>
+    <button mat-raised-button color="warn" class="add-tweet" (click)="getEarlierTweets()">Подгрузить еще твитов</button>
 </div>
 
 <ng-template #newTweetForm>

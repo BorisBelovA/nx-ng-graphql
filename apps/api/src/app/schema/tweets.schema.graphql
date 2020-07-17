@@ -8,11 +8,11 @@ type Tweet {
 }
 
 type Query {
-    tweets: [Tweet]
+    tweets(offset: Int): [Tweet]
     tweetById(id: Int!): Tweet
 }
 
 type Mutation {
     newTweet(authorId: Int!, text: String!): Tweet
-    updateTweetFavoriteState(tweetId: Int!, state: Boolean!): [Tweet]
+    updateTweetFavoriteState(tweetId: Int!, state: Boolean!): Tweet
 }

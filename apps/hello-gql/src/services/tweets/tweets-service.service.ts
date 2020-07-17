@@ -1,9 +1,20 @@
 import { Injectable } from '@angular/core';
 import { map, switchMap } from 'rxjs/operators';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { Tweet } from 'libs/models/graphql';
+
+const TweetBodyFragment = gql`
+  fragment TweetBody on Tweet {
+    id,
+    authorId,
+    likes,
+    retweets,
+    text,
+    favorite
+  }
+`
 
 export interface GQLResponseDTO<T> {
   data: {
@@ -14,16 +25,16 @@ export interface GQLResponseDTO<T> {
   stale: boolean;  
 }
 
-const getTweetsQuery = gql`{ 
-  tweets{
-    id,
-    authorId,
-    likes,
-    retweets,
-    text,
-    favorite
+const getTweetsQuery = gql` 
+  query tweets($offset: Int) {
+    tweets(
+      offset: $offset
+    ){
+      ...TweetBody
+    }
   }
-}`;
+  ${TweetBodyFragment}
+`;
 
 const addTweetMutation = gql`
   mutation newTweet($authorId: Int!, $text: String!) {
@@ -31,14 +42,10 @@ const addTweetMutation = gql`
       authorId: $authorId,
       text: $text
     ) {
-      id, 
-      authorId,
-      likes,
-      retweets,
-      text,
-      favorite
+      ...TweetBody
     }
   }
+  ${TweetBodyFragment}
 `;
 
 const updateTweetFavoriteState = gql`
@@ -47,11 +54,10 @@ const updateTweetFavoriteState = gql`
       tweetId: $tweetId,
       state: $state
     ) {
-      id,
-      text,
-      favorite
+      ...TweetBody
     }
   }
+  ${TweetBodyFragment}
 `;
 
 @Injectable({
@@ -65,7 +71,10 @@ export class TweetsService {
 
   public getTweets(): Observable<Array<any>> {
     return this.apollo.watchQuery({
-      query: getTweetsQuery
+      query: getTweetsQuery,
+      variables: {
+        offset: 0
+      }
     }).valueChanges.pipe(
       map((response: GQLResponseDTO<Tweet[]>) => response.data.tweets)
     )
@@ -79,7 +88,10 @@ export class TweetsService {
         text: text
       },
       refetchQueries: [{
-        query: getTweetsQuery
+        query: getTweetsQuery,
+        variables: {
+          offset: 0
+        }
       }]
     }).subscribe()
   }
@@ -91,9 +103,35 @@ export class TweetsService {
         tweetId: tweetId,
         state: state
       },
-      refetchQueries: [{
-        query: getTweetsQuery
-      }]
-    }).subscribe(d => console.log(d))
+      update: (store, { data }: {data: {updateTweetFavoriteState: Tweet}}) => {
+        const storeData: {tweets: Tweet[]} = store.readQuery({
+          query: getTweetsQuery,
+          variables: {
+            offset: 0
+          }
+        });
+
+        const newData = storeData.tweets.map((t: Tweet) => {
+          if (t.id === data.updateTweetFavoriteState.id) {
+            return data.updateTweetFavoriteState;
+          } 
+          return t
+        });
+
+        store.writeQuery({
+          query: getTweetsQuery,
+          variables: {
+            offset: 0
+          },
+          data: {
+            tweets: newData
+          }
+        });
+      }
+    }).subscribe()
+  }
+
+  public loadMoreTweets() {
+    
   }
 }
